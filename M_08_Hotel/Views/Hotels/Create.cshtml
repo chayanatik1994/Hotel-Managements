@@ -1,0 +1,113 @@
+﻿@model M_08_Hotel.ViewModels.HotelInputModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Create" asp-controller="Hotel" method="post" enctype="multipart/form-data">
+            <h3>Create new Hotel List</h3>
+            <div class="form-group row mb-1">
+                <label asp-for="HotelName" class="control-label control-label-sm col-2"></label>
+              <div class="col-4">
+                    <input asp-for="HotelName" class="form-control form-control-sm" />
+                    <span asp-validation-for="HotelName" class="text-danger"></span>
+              </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label asp-for="Location" class="control-label control-label-sm col-2"></label>
+                <div class="col-4">
+                    <input asp-for="Location" class="form-control form-control-sm" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label asp-for="Rating" class="control-label control-label-sm col-2"></label>
+                <div class="col-4">
+                    <input asp-for="Rating" class="form-control form-control-sm" />
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label asp-for="ContactInfo" class="control-label control-label-sm col-2"></label>
+                <div class="col-4">
+                    <input asp-for="ContactInfo" class="form-control form-control-sm" />
+                    <span asp-validation-for="ContactInfo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label asp-for="Picture" class="control-label control-label-sm col-2"></label>
+                <div class="col-4">
+                    <input type ="file"asp-for="Picture" class="form-control form-control-sm" />
+                    <span asp-validation-for="Picture" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+                <label asp-for="HotelRoomAvailable" class="col-form-label col-form-label-sm col-2"></label>
+                <div class="col-4">
+                    <input type="checkbox" asp-for="HotelRoomAvailable" />
+
+                </div>
+            </div>
+
+            <div class="form-group row mb-1">
+
+                <div class="col-6">
+                    <div class="d-flex align-items-center">
+                        <h4>Work logs</h4>
+                        <span style="flex:1 1 auto;"></span>
+                        <button type="submit" name="operation" value="add" class="btn btn-secondary btn-sm" formnovalidate>Add</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Room Type</th>
+                                <th>Reservation Date</th>
+                                <th>PricePerNight</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.Rooms.Count; i++)
+                            {
+                                <tr style="vertical-align:top">
+                                    <td>
+                                        <select asp-items="@(new SelectList(ViewBag.Room, "RoomType", "RoomType"))" type="text" asp-for="@Model.Rooms[i].RoomType" class="form-select form-select-sm">
+                                        </select>
+                                        <span asp-validation-for="@Model.Rooms[i].RoomType" class="text-danger small></span>
+                                    </td>
+                                    <td>
+                                    <input type="date" asp-for="@Model.Rooms[i].ReservationDate" class="form-control form-control-sm"/>
+                                        <span asp-validation-for="@Model.Rooms[i].ReservationDate" class="text-danger small"></span>
+                                    </td>
+                                    <td>
+                                        <input type="number" asp-for="@Model.Rooms[i].PricePerNight" class="form-control form-control-sm" />
+                                        <span asp-validation-for="@Model.Rooms[i].PricePerNight" class="text-danger small"></span>
+                                    </td>
+
+                                    <td style="width:70px; text-align:right">
+                                        <button name="operation" type="submit" class="btn btn-danger btn-sm" value="remove_@i" formnovalidate>Del</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="form-group row mb-1">
+
+                <div class="col-6 text-end">
+                    <button type="submit" class="btn btn-primary" name="operation" value="insert">Save</button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-12">
+        <a asp-action="Index" class="btn-link">Back to list</a>
+    </div>
+</div>
+
+

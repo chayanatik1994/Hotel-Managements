@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Hotel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h3 class="display-1" style="font-size: 2.50rem">Guests</h3>
+        <div class="d-flex justify-content-end mb-1">
+            <a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Hotels"><i class="fa fa-plus"></i> Create</a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Picture
+                    </th>
+                    <th>HotelName</th>
+                    <th>Location</th>
+                    <th>Rating</th>
+                    <th>ContactInfo</th>
+                    <th>HotelRoomAvailable</th>
+                    <th></th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var w in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="~/Pictures/@w.Picture" style="width:300px" />
+                        </td>
+                        <td>@w.HotelName</td>
+                        <td>@w.Location</td>
+                        <td>@w.Rating</td>
+                        <td>@w.ContactInfo</td>
+
+                        <td>@(w.HotelRoomAvailable ? "Yes" : "No")</td>
+                        <td>
+                            <a title="Edit this item" class="btn btn-primary btn-sm" asp-action="Edit" asp-controller="Guests" asp-route-id="@w.HotelId"><i class="fa fa-pencil"></i></a>
+                            <button title="Delete this item" type="button" class="btn btn-danger btn-sm del" data-pk="@w.HotelId"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="7">
+                            <h4>Rooms</h4>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>RoomType</th>
+                                        <th>Reservation Date</th>
+                                        <th>PricePerNight</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var wl in w.Rooms)
+                                    {
+                                        <tr>
+                                            <td>@wl.RoomType</td>
+                                            <td>@wl.ReservationDate?.ToString("yyyy-MM-dd")</td>
+                                            <td>@wl.PricePerNight.ToString("0.00")</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section styles {
+    <link href="~/libs/font/css/font-awesome.min.css" rel="stylesheet" />
+}
+@section scripts {
+    <script src="~/libs/jquery/jquery.min.js"></script>
+    <script>
+        $(() => {
+            $('.del').click(function () {
+                let did = $(this).data('pk');
+                let trD = $(this).closest('tr');
+                let trS = trD.next();
+                if (confirm("are you sure to delete?\nHotel with its all specs will be deleted.")) {
+                    $.ajax({
+                        type: 'post',
+                        url: '/Devices/Delete/' + did,
+                        dataType: 'json',
+                        success: r => {
+                            if (r.success && r.success == true) {
+                                trD.remove();
+                                trS.remove();
+                            }
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+}
+
+
+
